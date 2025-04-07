@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Advanced Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: white;
+      overflow: hidden;
+    }
+
+    .background-shapes {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float 20s infinite;
+    }
+
+    .shape1 {
+      width: 250px;
+      height: 250px;
+      background: #00e5ff;
+      top: 10%;
+      left: 5%;
+    }
+
+    .shape2 {
+      width: 300px;
+      height: 300px;
+      background: #00bfa5;
+      top: 50%;
+      left: 80%;
+    }
+
+    .shape3 {
+      width: 200px;
+      height: 200px;
+      background: #64ffda;
+      top: 80%;
+      left: 30%;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .calculator-box {
+      display: flex;
+      background-color: #1e1e1e;
+      border-radius: 20px;
+      padding: 20px;
+      gap: 20px;
+      box-shadow: 0 0 30px rgba(0, 255, 200, 0.3);
+      flex-wrap: wrap;
+    }
+
+    .history-panel, .advanced-panel {
+      display: flex;
+      flex-direction: column;
+      background-color: #2c2c2c;
+      color: white;
+      border-radius: 15px;
+      padding: 10px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .history-panel {
+      width: 200px;
+    }
+
+    .advanced-panel {
+      width: 150px;
+    }
+
+    .history-panel h3,
+    .advanced-panel h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .advanced-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .advanced-buttons button {
+      background-color: #007BFF;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    .calculator {
+      background-color: #1e1e1e;
+      padding: 20px;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .display {
+      background-color: #333;
+      color: white;
+      font-size: 2em;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: right;
+      margin-bottom: 15px;
+      width: 320px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 75px);
+      grid-gap: 10px;
+    }
+
+    .buttons button {
+      padding: 20px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 10px;
+      background-color: rgb(41, 41, 41);
+      color: white;
+      cursor: pointer;
+    }
+
+    .buttons button:hover {
+      background-color: #555;
+    }
+
+    .equal {
+      background-color: #0a84ff !important;
+    }
+
+    .clear {
+      background-color: #e53935 !important;
+    }
+
+    @media (max-width: 600px) {
+      .calculator-box {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .display {
+        width: 100%;
+        font-size: 1.5em;
+      }
+
+      .buttons {
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 8px;
+      }
+
+      .buttons button,
+      .advanced-buttons button {
+        padding: 16px;
+        font-size: 1em;
+      }
+
+      .history-panel,
+      .advanced-panel {
+        width: 100%;
+        max-height: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-shapes">
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+    <div class="shape shape3"></div>
+  </div>
+
+  <div class="container">
+    <div class="calculator-box">
+      <div class="history-panel">
+        <h3>History</h3>
+        <div id="history"></div>
+      </div>
+
+      <div class="calculator">
+        <div id="display" class="display">0</div>
+        <div class="buttons">
+          <button onclick="clearDisplay()" class="clear">C</button>
+          <button onclick="appendValue('(')">(</button>
+          <button onclick="appendValue(')')">)</button>
+          <button onclick="appendValue('÷')">÷</button>
+
+          <button onclick="appendValue('7')">7</button>
+          <button onclick="appendValue('8')">8</button>
+          <button onclick="appendValue('9')">9</button>
+          <button onclick="appendValue('×')">×</button>
+
+          <button onclick="appendValue('4')">4</button>
+          <button onclick="appendValue('5')">5</button>
+          <button onclick="appendValue('6')">6</button>
+          <button onclick="appendValue('-')">−</button>
+
+          <button onclick="appendValue('1')">1</button>
+          <button onclick="appendValue('2')">2</button>
+          <button onclick="appendValue('3')">3</button>
+          <button onclick="appendValue('+')">+</button>
+
+          <button onclick="appendValue('0')">0</button>
+          <button onclick="appendValue('.')">.</button>
+          <button onclick="calculate()" class="equal">=</button>
+          <button onclick="backspace()">⌫</button>
+        </div>
+      </div>
+
+      <div class="advanced-panel">
+        <h3>Advanced</h3>
+        <div class="advanced-buttons">
+          <button onclick="appendValue('^')">^</button>
+          <button onclick="appendValue('%')">%</button>
+          <button onclick="appendValue('√(')">√</button>
+          <button onclick="appendValue('log(')">log</button>
+          <button onclick="appendValue('ln(')">ln</button>
+          <button onclick="appendValue('sin(')">sin</button>
+          <button onclick="appendValue('cos(')">cos</button>
+          <button onclick="appendValue('tan(')">tan</button>
+          <button onclick="appendValue('π')">π</button>
+          <button onclick="appendValue('e')">e</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById("display");
+    let history = document.getElementById("history");
+    let rawInput = "";
+
+    function formatIndianNumber(numStr) {
+      if (!/^-?\d+(\.\d+)?$/.test(numStr)) return numStr;
+      const [intPart, decPart] = numStr.split(".");
+      let lastThree = intPart.slice(-3);
+      let other = intPart.slice(0, -3);
+      if (other !== "") {
+        lastThree = "," + lastThree;
+      }
+      let formatted = other.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+      return decPart ? formatted + "." + decPart : formatted;
+    }
+
+    function updateDisplay() {
+      const tokens = rawInput.split(/([^\d.]+)/g).filter(Boolean);
+      let formatted = tokens.map(token => /^\d+(\.\d+)?$/.test(token) ? formatIndianNumber(token) : token).join("");
+      display.innerText = formatted || "0";
+    }
+
+    function appendValue(value) {
+      if (display.innerText === "0" || display.innerText === "Error") {
+        rawInput = value;
+      } else {
+        rawInput += value;
+      }
+      updateDisplay();
+    }
+
+    function clearDisplay() {
+      rawInput = "";
+      updateDisplay();
+    }
+
+    function backspace() {
+      rawInput = rawInput.slice(0, -1);
+      updateDisplay();
+    }
+
+    function calculate() {
+      let expression = rawInput.replace(/×/g, "*").replace(/÷/g, "/").replace(/π/g, "Math.PI").replace(/e/g, "Math.E").replace(/√/g, "Math.sqrt").replace(/log/g, "Math.log10").replace(/ln/g, "Math.log").replace(/sin/g, "Math.sin").replace(/cos/g, "Math.cos").replace(/tan/g, "Math.tan");
+      try {
+        let result = eval(expression);
+        let formattedResult = formatIndianNumber(result.toString());
+        history.innerHTML += `<div>${display.innerText} = ${formattedResult}</div>`;
+        rawInput = result.toString();
+        updateDisplay();
+      } catch {
+        display.innerText = "Error";
+      }
+    }
+  </script>
+</body>
+</html>
